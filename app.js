@@ -7,15 +7,15 @@ server.use(express.json());
 
 let nextPurchaseId = 1;
 let purchases = [
-    { id: nextPurchaseId++, amount: 300, category: 'Auto', description: 'Changed the wheels', open: false },
-    { id: nextPurchaseId++, amount: 600, category: 'Health', description: 'Went to doctor', open: false },
-    { id: nextPurchaseId++, amount: 800, category: 'Entertainment', description: 'Played football with friends', open: false }
+    { id: nextPurchaseId++, amount: 300, category: 'Auto', description: 'Changed the wheels' },
+    { id: nextPurchaseId++, amount: 600, category: 'Health', description: 'Went to doctor' },
+    { id: nextPurchaseId++, amount: 800, category: 'Entertainment', description: 'Played football with friends' }
 ];
 
 server.get('/api/purchases', (req, res) => {
      setTimeout(() => {
          if (Math.random() > 0.5) {
-            res.send(purchases);
+            res.send(purchases.map(o => ({id: o.id, amount: o.amount, category: o.category})));
          } else {
              res.statusCode = 500;
              res.send();
@@ -23,7 +23,14 @@ server.get('/api/purchases', (req, res) => {
      }, 1000);
 });
 
-
+server.get('/api/purchases/:id', (req, res) => {
+    setTimeout(() => {
+        const id = parseInt(req.params.id, 10);
+        const purchase = purchases.find(o => o.id === id);
+        res.send(purchase);
+    }, 1000);
+    
+});
 
 server.post('/api/purchases', (req, res) => {
      setTimeout(() => {
